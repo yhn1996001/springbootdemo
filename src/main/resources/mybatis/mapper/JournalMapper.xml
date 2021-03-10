@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace 指定對應一個Dao(Mapper) 介面 -->
+<mapper namespace="com.sean.webcrawler.mapper.JournalMapper">
+
+  <!--select 查詢語法-->
+  <!--id CourseDao 方法名稱 -->
+<!--
+         SELECT * FROM test.journal_six
+         where journalName='Communications of the Association for Information Systems'
+-->
+  <select id="queryList" resultType="JournalOut">
+    SELECT * FROM test.journal_cais
+    WHERE CAST(`volume` AS SIGNED)  &lt; 23
+    and  CAST(`volume` AS SIGNED) &gt; 14
+    order by CAST(`volume` AS SIGNED), CAST(`firstpag` AS SIGNED);
+	 </select>
+  <select id="querypajais" resultType="JournalOut">
+        SELECT * FROM test.journal_pajais_1224
+	 </select>
+  <select id="queryTHCI" resultType="JournalOut">
+        SELECT * FROM test.journal_thci_1224
+	 </select>
+
+  <select id="queryCAIS" resultType="JournalOut">
+        SELECT * FROM test.journal_cais
+	 </select>
+  <select id="queryTRR" resultType="JournalOut">
+        SELECT * FROM test.journal_trr_1224
+	 </select>
+
+  <select id="queryListByjournalName" resultType="JournalOut">
+        SELECT * FROM test.journal_six where `journalName`= #{journalName};
+	 </select>
+
+  <select id="queryListBywhere" resultType="JournalOut">
+      SELECT * FROM test.journal_six
+      where(journalName ='Pacific Asia Journal of the Association for Information Systems')
+      and  not (auther LIKE '%Ting-Peng Liang%' or auther LIKE '%James J. Jiang%' or  auther LIKE '%Jacob Chia-An Tsai%')
+      and not (title like '%Guest Editors’ Introduction%'  or title like '%Guest Editor’s Introduction%' or title LIKE 'Editorial Introduction%' or title like 'PAJAIS special issue on Social Media and Social Commerce%'   or id = 7)
+	 </select>
+  <select id="queryListBywhere1" resultType="JournalOut">
+        SELECT *
+        FROM journal_six
+        where  (journalName ='AIS Transactions on Human-Computer Interaction')
+        and not ( auther LIKE '%Fiona Nah%' or auther LIKE '%Dennis Galletta%' or  auther LIKE '%Paul Benjamin Lowry%' or auther LIKE '%Joe Valacich%' or  auther LIKE '%Ping Zhang%' or auther LIKE 'AIS Transactions on Human-Computer Interaction%')
+        and not (title like '%Guest Editors’ Introduction%'  or title like '%Guest Editor’s Introduction%' or title LIKE 'Editorial Introduction%' or title like '%Reviewer Acknowledgements%' or title LIKE 'HCI Research:%' )
+        and keyword is not NULL
+        UNION
+        SELECT *
+        FROM journal_six
+        where id in (48,199,436)
+         </select>
+<!-- 在這先改  INSERT INTO的TABLE  AISDataPipeline 不用一起改方法 -->
+  <insert id="addJournal"  parameterType="com.sean.webcrawler.pojo.JournalOut">
+        INSERT INTO journal_cais
+        (`auther`,`title`,`journalName`,`year`,`volume`,`keyword`,`type`,`firstpag`,`issn`,`Abstract`,`url`)
+        VALUES(#{auther},#{title},#{journalName},#{year},#{volume},#{keyword},#{type},#{firstpag},#{issn},#{Abstract},#{url});
+  </insert>
+
+<!--  暫時不用，攋的改 -->
+  <insert id="addTHCI"  parameterType="com.sean.webcrawler.pojo.JournalOut">
+        INSERT INTO journal_thci
+        (`auther`,`title`,`journalName`,`year`,`volume`,`keyword`,`type`,`firstpag`,`issn`,`Abstract`,`url`)
+        VALUES(#{auther},#{title},#{journalName},#{year},#{volume},#{keyword},#{type},#{firstpag},#{issn},#{Abstract},#{url});
+  </insert>
+
+</mapper>

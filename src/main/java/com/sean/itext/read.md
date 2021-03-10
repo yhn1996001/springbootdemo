@@ -1,0 +1,1 @@
+ ## iText是著名的開放項目，是用於生成PDF文檔的一個java類庫。通過iText不僅可以生成PDF或rtf的文檔，而且可以將XML、Html文件轉化為PDF文件。

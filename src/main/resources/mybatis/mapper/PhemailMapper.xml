@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace 指定對應一個Dao(Mapper) 介面 -->
+<mapper namespace="com.sean.webcrawler.mapper.PhemailMapper">
+
+  <!--select 查詢語法-->
+  <!--id CourseDao 方法名稱 -->
+  <select id="queryList" resultType="Phemail">
+	        select * from Phemail ;
+	 </select>
+  <insert id="addPhemail" useGeneratedKeys="true" keyProperty="id" parameterType="com.sean.webcrawler.pojo.Phemail">
+    INSERT INTO phemail(University,Department,PhName,Email)
+    VALUES (#{University},#{Department},#{PhName},#{Email});
+ </insert>
+
+  <insert id="addPhemailList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO phemail(University,Department,PhName,Email)  VALUES
+    <foreach collection="list" item="item" separator=",">
+      (#{item.University},#{item.Department},#{item.PhName},#{item.Email});
+    </foreach>
+ </insert>
+
+</mapper>
